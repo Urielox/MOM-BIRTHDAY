@@ -52,11 +52,11 @@
             font-weight: 600;
         }
 
-        /* Contenedor de la imagen en forma de corazón usando máscara SVG */
+        /* Contenedor de la imagen en forma de corazón */
         .heart-frame {
             margin: 0 auto 25px auto;
-            width: 220px;
-            height: 220px;
+            width: 280px; 
+            height: 280px; 
             background: #ffe6ea;
             display: flex;
             justify-content: center;
@@ -69,12 +69,25 @@
             mask-repeat: no-repeat;
             -webkit-mask-position: center;
             mask-position: center;
+            
+            /* Animación de latido */
+            animation: latido 1.2s infinite;
         }
 
         .heart-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        /* Keyframes para que el corazón lata (lub-dub) */
+        @keyframes latido {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.12); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.12); }
+            60% { transform: scale(1); }
+            100% { transform: scale(1); }
         }
 
         /* Estilos del poema y firma */
@@ -107,6 +120,8 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(216, 27, 96, 0.3);
             transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .play-btn:hover {
@@ -119,6 +134,28 @@
             cursor: default;
             transform: scale(1);
             box-shadow: none;
+            margin-bottom: 10px; /* Para separar el botón deshabilitado del control de audio */
+        }
+
+        /* Estilos del contenedor del reproductor de audio */
+        .audio-container {
+            display: none; /* Oculto inicialmente */
+            margin-top: 15px;
+            width: 100%;
+            animation: aparecer 0.5s ease-out;
+        }
+
+        audio {
+            width: 100%;
+            height: 45px;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        /* Animación para que el control aparezca suavemente */
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Clases para la animación de JavaScript (las flores) */
@@ -139,7 +176,7 @@
         /* Responsivo */
         @media (max-width: 400px) {
             h1 { font-size: 2.8rem; }
-            .heart-frame { width: 180px; height: 180px; }
+            .heart-frame { width: 220px; height: 220px; } 
             .poem { font-size: 1rem; }
             .play-btn { font-size: 1rem; padding: 12px 20px; }
         }
@@ -168,26 +205,34 @@
             siendo una luz para todos.
         </div>
 
-        <div class="signature">Atentamente: Urigato</div>
+        <div class="signature">Atentamente: Urigato<br>2026</div>
 
         <!-- El botón para la música -->
         <button id="btn-musica" class="play-btn">puchale pa que suenen las mañanitas 🎶</button>
-    </div>
 
-    <!-- El archivo de audio oculto -->
-    <audio id="musica" src="mananitas.mp3" loop></audio>
+        <!-- El contenedor con el reproductor de audio oculto -->
+        <div id="contenedor-audio" class="audio-container">
+            <!-- Ahora la etiqueta audio tiene la propiedad "controls" -->
+            <audio id="musica" src="mananitas.mp3" controls loop></audio>
+        </div>
+    </div>
 
     <!-- Scripts (Lluvia de flores + Botón de música) -->
     <script>
         // 1. Script para el botón de las mañanitas
         const btnMusica = document.getElementById('btn-musica');
         const audio = document.getElementById('musica');
+        const contenedorAudio = document.getElementById('contenedor-audio');
 
         btnMusica.addEventListener('click', function() {
+            // Mostramos el reproductor con sus controles
+            contenedorAudio.style.display = 'block';
+            
+            // Reproducimos la canción
             audio.play();
-            // Cambiamos el texto del botón una vez que lo presiona
+            
+            // Cambiamos el texto del botón y lo deshabilitamos
             btnMusica.innerHTML = '¡Disfruta tu día! 💖';
-            // Lo deshabilitamos para que no le pique muchas veces sin querer
             btnMusica.disabled = true; 
         });
 
