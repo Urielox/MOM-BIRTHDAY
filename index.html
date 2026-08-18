@@ -61,7 +61,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* La máscara recorta el contenedor con forma de corazón */
             -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
             mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
             -webkit-mask-size: 100%;
@@ -78,7 +77,7 @@
             object-fit: cover;
         }
 
-        /* Estilos del poema */
+        /* Estilos del poema y firma */
         .poem {
             font-size: 1.15rem;
             color: #555;
@@ -91,10 +90,38 @@
             font-family: 'Dancing Script', cursive;
             color: #d81b60;
             font-size: 2.2rem;
-            margin-top: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
         }
 
-        /* Clases para la animación de JavaScript */
+        /* Estilos del botón */
+        .play-btn {
+            background-color: #d81b60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background-color: #c2185b;
+            transform: scale(1.05);
+        }
+
+        .play-btn:disabled {
+            background-color: #ff8fa3;
+            cursor: default;
+            transform: scale(1);
+            box-shadow: none;
+        }
+
+        /* Clases para la animación de JavaScript (las flores) */
         .falling-element {
             position: fixed;
             top: -10%;
@@ -109,11 +136,12 @@
             100% { transform: translateY(110vh) rotate(360deg) translateX(50px); opacity: 0; }
         }
 
-        /* Responsivo para celulares muy pequeños */
+        /* Responsivo */
         @media (max-width: 400px) {
             h1 { font-size: 2.8rem; }
             .heart-frame { width: 180px; height: 180px; }
             .poem { font-size: 1rem; }
+            .play-btn { font-size: 1rem; padding: 12px 20px; }
         }
     </style>
 </head>
@@ -121,9 +149,9 @@
 
     <div class="card">
         <h1>¡Feliz Cumpleaños!</h1>
-        <h2>Mamá, ti amo mucho</h2>
+        <h2>Mamá, te amo mucho</h2>
 
-        <!-- Aquí es donde debes asegurarte de tener tu foto llamada imagen.jpg -->
+        <!-- Tu foto en forma de corazón -->
         <div class="heart-frame">
             <img src="imagen.jpg" alt="Foto con mamá">
         </div>
@@ -141,36 +169,47 @@
         </div>
 
         <div class="signature">Atentamente: Urigato</div>
+
+        <!-- El botón para la música -->
+        <button id="btn-musica" class="play-btn">puchale pa que suenen las mañanitas 🎶</button>
     </div>
 
-    <!-- Script para la lluvia de flores y destellos -->
+    <!-- El archivo de audio oculto -->
+    <audio id="musica" src="mananitas.mp3" loop></audio>
+
+    <!-- Scripts (Lluvia de flores + Botón de música) -->
     <script>
+        // 1. Script para el botón de las mañanitas
+        const btnMusica = document.getElementById('btn-musica');
+        const audio = document.getElementById('musica');
+
+        btnMusica.addEventListener('click', function() {
+            audio.play();
+            // Cambiamos el texto del botón una vez que lo presiona
+            btnMusica.innerHTML = '¡Disfruta tu día! 💖';
+            // Lo deshabilitamos para que no le pique muchas veces sin querer
+            btnMusica.disabled = true; 
+        });
+
+        // 2. Script para la lluvia de flores y estrellas
         function createFallingElement() {
             const element = document.createElement('div');
             element.classList.add('falling-element');
             
-            // Array de emojis bonitos para que caigan (puedes agregar o quitar)
             const emojis = ['🌸', '🌺', '💖', '✨', '🌼', '🌷'];
             element.innerText = emojis[Math.floor(Math.random() * emojis.length)];
             
-            // Posición aleatoria horizontal
             element.style.left = Math.random() * 100 + 'vw';
-            
-            // Duración aleatoria para que caigan a distintas velocidades (entre 4 y 7 segundos)
             element.style.animationDuration = Math.random() * 3 + 4 + 's';
-            
-            // Tamaño aleatorio para dar profundidad
             element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
             
             document.body.appendChild(element);
             
-            // Eliminar el elemento del HTML una vez que termina su animación
             setTimeout(() => {
                 element.remove();
             }, 7000);
         }
 
-        // Crear un nuevo elemento cada 400 milisegundos
         setInterval(createFallingElement, 400);
     </script>
 
